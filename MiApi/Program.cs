@@ -48,6 +48,31 @@ app.MapGet(
     )
     .WithName("GetWeatherForecast");
 
+app.MapGet(
+        "/random/numbers",
+        (int? count = 5, int? min = 1, int? max = 100) =>
+        {
+            var random = Random.Shared;
+            var numbers = Enumerable
+                .Range(0, count ?? 5)
+                .Select(_ => random.Next(min ?? 1, (max ?? 100) + 1))
+                .ToArray();
+            
+            var average = numbers.Average();
+            
+            return new
+            {
+                Count = count ?? 5,
+                Min = min ?? 1,
+                Max = max ?? 100,
+                Average = Math.Round(average, 2),
+                Numbers = numbers,
+                GeneratedAt = DateTime.Now
+            };
+        }
+    )
+    .WithName("GetRandomNumbers");
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
