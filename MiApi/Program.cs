@@ -73,6 +73,34 @@ app.MapGet(
     )
     .WithName("GetRandomNumbers");
 
+app.MapGet(
+        "/random/password",
+        (int length = 12) =>
+        {
+            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = Random.Shared;
+            
+            var password = new string(
+                Enumerable.Range(0, length)
+                    .Select(_ => chars[random.Next(chars.Length)])
+                    .ToArray()
+            );
+
+            return new
+            {
+                Length = length,
+                Password = password,
+                GeneratedAt = DateTime.Now
+            };
+        }
+    )
+    .WithName("GetRandomPassword");
+
+//f dfljghldskfghhlkgfsdfgds
+// frgfgsdfgsdfgds
+
+
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
